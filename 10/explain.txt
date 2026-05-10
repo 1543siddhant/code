@@ -1,0 +1,266 @@
+Theory
+
+A distributed application is a program where data storage and processing are split across systems or nodes. In a weather-analysis problem, this usually means:
+
+weather data is collected from an online source,
+data is processed in parallel,
+the result is computed using a distributed framework like MapReduce.
+What is MapReduce?
+
+MapReduce is a programming model used to process large datasets in parallel.
+
+It has two main stages:
+
+1) Map phase
+
+Each input record is converted into intermediate key-value pairs.
+
+For this problem, each weather record can be mapped as:
+
+(year, temperature)
+2) Reduce phase
+
+All values with the same key are grouped together, and a summary is computed.
+
+For this problem, the reducer calculates:
+
+average temperature for each year
+
+Then:
+
+the hottest year is the year with the maximum average temperature
+the coldest year is the year with the minimum average temperature
+Basic flow
+Weather Data -> Mapper -> (Year, Temp) pairs -> Reducer -> Avg temp per year -> Hottest/Coldest year
+Code explanation
+1) Read the dataset
+import pandas as pd
+
+df = pd.read_csv('mumbai_weather.csv')
+df.head()
+What it does
+imports Pandas
+loads the CSV file into a DataFrame
+shows the first few rows
+Meaning
+
+The dataset contains columns like:
+
+time
+tavg
+tmin
+tmax
+prcp
+2) Fill missing average temperature
+df['tavg'] = df['tavg'].fillna((df['tmin'] + df['tmax'])/2)
+df.isnull().sum()
+What it does
+
+If tavg is missing, it replaces it with:
+
+(tmin + tmax) / 2
+Purpose
+
+This is data cleaning. Missing values can affect the final average temperature per year.
+
+3) Extract year from date
+df['Year'] = df['time'].apply(lambda x: x.split('-')[2])
+
+df.tail()
+What it does
+
+The time column is assumed to be in the format:
+
+DD-MM-YYYY
+
+So split('-')[2] gives the year.
+
+Example:
+
+01-01-1990 -> 1990
+Purpose
+
+The year is needed because the task is to find the hottest/coldest year.
+
+4) Fill missing values year-wise
+df['tavg'] = df.groupby('Year')['tavg'].transform(lambda x: x.fillna(x.mean()))
+What it does
+
+For each year, if some tavg values are still missing, they are replaced by that year’s mean tavg.
+
+Purpose
+
+This makes the dataset cleaner and more reliable before processing.
+
+5) Fill missing tmin, tmax, and prcp
+df['tmin'] = df['tmin'].fillna(df['tavg'] - 5)
+df['tmax'] = df['tmax'].fillna(df['tavg'] + 5)
+
+df['prcp'] = df['prcp'].fillna(0)
+What it does
+if tmin is missing, it is estimated as tavg - 5
+if tmax is missing, it is estimated as tavg + 5
+missing rainfall prcp is replaced with 0
+Purpose
+
+Again, this is preprocessing to avoid null values.
+
+6) Check missing values and shape
+df.isnull().sum()
+df.shape
+What it does
+isnull().sum() checks remaining missing values
+shape shows rows and columns
+Purpose
+
+To verify that the dataset is ready for processing.
+
+7) Mapper function
+def mapper(df):
+    result = []
+
+    for _,row in df.iterrows():
+        year = row['Year']
+        tavg = row['tavg']
+        result.append((year,tavg))
+
+    return result
+What it does
+
+This is the Map phase.
+
+For every row:
+
+take the year
+take the average temperature
+emit a pair:
+(year, tavg)
+Example output
+[('1990', 23.2), ('1990', 22.2), ('1991', 24.1)]
+Meaning
+
+This step converts raw data into key-value pairs grouped by year.
+
+8) Run the mapper
+mapped_output = mapper(df)
+mapped_output
+What it does
+
+Calls the mapper and stores intermediate data.
+
+9) Reducer function
+def reducer(mapped_output):
+    grouped = {}
+
+    for year,tavg in mapped_output:
+        if year in grouped:
+            grouped[year].append(tavg)
+        else:
+            grouped[year] = [tavg]
+
+    avg_by_year = {year: sum(tavgs)/len(tavgs) for year,tavgs in grouped.items()}
+
+    return avg_by_year
+What it does
+
+This is the Reduce phase.
+
+It:
+
+groups all temperature values by year
+calculates the average temperature for each year
+Example
+
+Input:
+
+[
+  ('1990', 23.2),
+  ('1990', 22.2),
+  ('1991', 25.0)
+]
+
+Output:
+
+{
+  '1990': 22.7,
+  '1991': 25.0
+}
+10) Run the reducer
+reducer_ouptput = reducer(mapped_output)
+reducer_ouptput
+What it does
+
+Gets the average temperature for each year.
+
+11) Find hottest year
+hottest_year = max(reducer_ouptput,key=reducer_ouptput.get)
+print("🔥 Hottest year:", hottest_year, "with avg temp =", reducer_ouptput[hottest_year])
+What it does
+finds the year with the largest average temperature
+Meaning
+
+That year is the hottest year.
+
+12) Find coldest year
+coldest_year = min(reducer_ouptput,key=reducer_ouptput.get)
+print("❄️ Coldest year:", coldest_year, "with avg temp =", reducer_ouptput[coldest_year])
+What it does
+finds the year with the smallest average temperature
+Meaning
+
+That year is the coldest year.
+
+Does this code satisfy the problem?
+Partially yes
+
+It satisfies the main goal of the assignment:
+
+it reads weather data,
+processes it,
+computes yearly average temperatures,
+finds the hottest and coldest year.
+But not completely
+
+It does not fully satisfy the “distributed application” requirement because:
+
+It is not using a real distributed framework
+No Hadoop MapReduce
+No Spark
+No multiple nodes
+It does not fetch weather data from the Internet in the code
+It loads a local file: mumbai_weather.csv
+The MapReduce is only simulated
+The mapper() and reducer() functions are plain Python functions
+They are not running in a distributed cluster
+So the correct judgment is:
+Good for logic demonstration
+Not a full distributed MapReduce implementation
+Main issue in the notebook
+
+The notebook is essentially a single-machine Python solution that imitates MapReduce.
+
+If your teacher expects a true distributed assignment, you should mention:
+
+“This notebook demonstrates the MapReduce idea using Python functions, but to make it
+ fully distributed, it should be implemented using Hadoop Streaming, Hadoop MapReduce, or Apache Spark.”
+
+Small code observations
+
+There are a few minor points:
+
+reducer_ouptput is misspelled, but the code still works because the same name is used later.
+cancel is not relevant here.
+The code assumes the date format is always DD-MM-YYYY.
+The reducer uses tavg to compute yearly averages, which is appropriate for this task.
+Better explanation for exam answer
+
+You can write:
+
+The program processes weather records using a MapReduce-like approach.
+ In the map phase, each record is transformed into a pair (year, temperature). 
+ In the reduce phase, temperatures are grouped by year and the average temperature 
+ for each year is calculated. The year with the maximum average temperature is the 
+ hottest year, and the year with the minimum average temperature is the coldest year. 
+ However, the given code is not a true distributed MapReduce program because it runs
+  locally in Python and uses a CSV file instead of directly fetching data from the
+   Internet.
