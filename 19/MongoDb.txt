@@ -1,0 +1,171 @@
+// Switch to a new database (or create it if it doesn't exist)
+use mydatabase
+
+
+// Create a collection (or use an existing one)
+db.createCollection("mycollection")
+
+**INSERT**
+// Insert single document
+db.mycollection.insertOne({
+    name: "John Cena",
+    age: 40,
+    city: "New York"
+})
+
+// Insert multiple documents
+db.mycollection.insertMany([
+    { name: "Jane", age: 25, city: "Los Angeles" },
+    { name: "Alex", age: 28, city: "Chicago" },
+    { name: "Shawty", age: 23, city: "New York" }
+])
+
+
+**QUERY**
+// Find all documents in the collection
+db.mycollection.find()
+
+// Find documents with a specific condition (e.g., city = "New York")
+db.mycollection.find({ city: "New York" })
+
+// Find a single document
+db.mycollection.findOne({ name: "Shawty" })
+
+
+**UPDATE**
+// Update a single document (e.g., update age for John Doe)
+db.mycollection.updateOne(
+    { name: "Jane" },
+    { $set: { age: 31 } }
+)
+
+// Update multiple documents (e.g., increment age by 1 for all users in New York)
+db.mycollection.updateMany(
+    { city: "New York" },
+    { $inc: { age: 1 } }
+)
+
+
+**DELETE**
+// Delete a single document
+db.mycollection.deleteOne({ name: "John Cena" })
+
+// Delete multiple documents
+db.mycollection.deleteMany({ city: "Los Angeles" })
+
+
+
+-------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------
+
+MongoDB: Creation of Database and Collection with CRUD Operations
+
+MongoDB is a NoSQL document-oriented database that stores data in BSON format. CRUD operations are used to Create, Read, Update, and Delete documents.
+
+Steps to Execute CRUD Operations in MongoDB
+
+1. Open MongoDB Shell
+
+mongosh
+
+2. Create or Switch Database
+
+use mydatabase
+
+3. Create Collection
+
+db.createCollection("mycollection")
+
+INSERT Operation
+
+Insert Single Document
+
+db.mycollection.insertOne({
+name: "John Cena",
+age: 40,
+city: "New York"
+})
+
+Insert Multiple Documents
+
+db.mycollection.insertMany([
+{ name: "Jane", age: 25, city: "Los Angeles" },
+{ name: "Alex", age: 28, city: "Chicago" },
+{ name: "Shawty", age: 23, city: "New York" }
+])
+
+QUERY Operation
+
+Find All Documents
+
+db.mycollection.find()
+
+Find Documents with Condition
+
+db.mycollection.find({ city: "New York" })
+
+Find Single Document
+
+db.mycollection.findOne({ name: "Shawty" })
+
+UPDATE Operation
+
+Update One Document
+
+db.mycollection.updateOne(
+{ name: "Jane" },
+{ $set: { age: 31 } }
+)
+
+Update Multiple Documents
+
+db.mycollection.updateMany(
+{ city: "New York" },
+{ $inc: { age: 1 } }
+)
+
+DELETE Operation
+
+Delete One Document
+
+db.mycollection.deleteOne({ name: "John Cena" })
+
+Delete Multiple Documents
+
+db.mycollection.deleteMany({ city: "Los Angeles" })
+
+Additional Commands
+
+Show Databases
+
+show dbs
+
+Show Collections
+
+show collections
+
+Theory
+
+CRUD stands for Create, Read, Update, and Delete. MongoDB performs CRUD operations on collections containing JSON-like documents.
+
+MapReduce in MongoDB
+
+MapReduce is used for processing and analyzing large datasets. It works in two phases:
+
+1. Map Function:
+   Processes documents and emits key-value pairs.
+
+2. Reduce Function:
+   Groups and combines values with the same key.
+
+MapReduce can be used in MongoDB to:
+
+* Count records
+* Calculate averages
+* Group data by fields
+* Perform aggregation operations
+
+Conclusion
+
+MongoDB is a flexible NoSQL database that supports efficient CRUD operations and MapReduce processing for large-scale data analysis.
+

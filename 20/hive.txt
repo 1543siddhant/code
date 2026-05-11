@@ -1,0 +1,108 @@
+Hive: Introduction, Database and Table Creation, Partition, Built-in Functions and Operators, View and Index
+
+Apache Hive is a distributed data warehouse system built on top of Hadoop. 
+It provides a SQL-like language called HiveQL to query, summarize, and analyze large datasets stored in distributed storage.
+ Hive compiles queries into execution tasks instead of requiring users to write low-level MapReduce jobs directly. ([Apache Hive][1])
+
+Hive architecture mainly includes the Metastore, Driver, and HiveServer2/Beeline client access.
+ The Metastore stores metadata such as databases, tables, and partitions; Hive and other engines use this
+  information at runtime to parse and execute queries efficiently. Beeline is the command-line JDBC client for
+   HiveServer2, and HiveServer2 is started using `$HIVE_HOME/bin/hiveserver2` or `$HIVE_HOME/bin/hive --service hiveserver2`. ([Apache Hive][2])
+
+How to navigate Hive on a Windows laptop: open the terminal you use for Hive commands, start HiveServer2,
+ then connect with Beeline. Use the database and table commands after the Beeline prompt opens. 
+ A common sequence is: `hiveserver2`, then `beeline -u jdbc:hive2://localhost:10000`, then run HiveQL commands. 
+ This matches Hive’s official client-server model through HiveServer2 and Beeline. ([Apache Hive][3])
+
+CREATE DATABASE:
+`CREATE DATABASE mydb;`
+`CREATE DATABASE IF NOT EXISTS mydb;`
+`SHOW DATABASES;`
+`USE mydb;`
+
+CREATE TABLE:
+`CREATE TABLE student (id INT, name STRING, marks INT);`
+
+To create a text table with delimiters:
+`CREATE TABLE student (id INT, name STRING, marks INT) ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' STORED AS TEXTFILE;`
+
+`SHOW TABLES;`
+`DESCRIBE student;`
+
+LOAD DATA:
+`LOAD DATA LOCAL INPATH 'C:/path/student.txt' INTO TABLE student;`
+
+Hive uses schema-on-read, so data is validated when it is read/query executed, not necessarily when it is loaded.
+ Hive’s DDL includes CREATE DATABASE, TABLE, VIEW, FUNCTION, INDEX, and related commands. ([Apache Hive][4])
+
+PARTITION IN HIVE:
+Partitioning divides a table into separate data directories based on a column value. 
+This improves query performance because Hive can skip irrelevant partitions during reads. 
+A partitioned table is created using `PARTITIONED BY`. ([Apache Hive][5])
+
+Example:
+`CREATE TABLE sales (id INT, amount DOUBLE) PARTITIONED BY (country STRING);`
+
+Insert into a partition:
+`INSERT INTO TABLE sales PARTITION (country='India') VALUES (1, 5000);`
+
+Static partitioning means the partition value is given manually.
+ Dynamic partitioning creates partitions automatically based on input data. ([Apache Hive][5])
+
+BUILT-IN FUNCTIONS AND OPERATORS:
+Hive supports many built-in functions and operators. 
+Common operators include arithmetic, relational, logical, and string operators. 
+Common functions include mathematical, string, date, conversion, collection, and conditional functions. 
+You can list them using:
+`SHOW FUNCTIONS;`
+`DESCRIBE FUNCTION function_name;`
+`DESCRIBE FUNCTION EXTENDED function_name;` ([Apache Hive][6])
+
+Examples:
+`SELECT count(*) FROM student;`
+`SELECT max(marks) FROM student;`
+`SELECT upper(name) FROM student;`
+`SELECT id, name FROM student WHERE marks >= 60;`
+
+VIEW IN HIVE:
+A view is a logical table based on a query. It does not store data physically.
+ When you query a view, Hive evaluates the view definition and returns the result. ([Apache Hive][5])
+
+Example:
+`CREATE VIEW high_marks AS SELECT id, name, marks FROM student WHERE marks > 80;`
+`SELECT * FROM high_marks;`
+`DROP VIEW high_marks;`
+
+INDEX IN HIVE:
+An index is used on one or more table columns to improve access to data.
+ Hive supports `CREATE INDEX` and `DROP INDEX`. ([Apache Hive][5])
+
+Example:
+`CREATE INDEX idx_marks ON TABLE student (marks) AS 'COMPACT' WITH DEFERRED REBUILD;`
+`DROP INDEX idx_marks ON student;`
+
+MAIN COMMAND FLOW FOR EXAM:
+
+1. Start HiveServer2.
+2. Connect through Beeline.
+3. Create database.
+4. Use database.
+5. Create table.
+6. Insert/load data.
+7. Query data using HiveQL.
+8. Use partition for faster query execution.
+9. Use built-in functions/operators for analysis.
+10. Create view or index when needed. ([Apache Hive][7])
+
+Conclusion:
+Hive is used for large-scale data warehousing and analytics in the Hadoop ecosystem.
+ It provides SQL-like access to big data, supports database and table creation, partitioning, built-in functions, operators, views, 
+ and indexes, and is commonly accessed through HiveServer2 and Beeline. ([Apache Hive][1])
+
+[1]: https://hive.apache.org/?utm_source=chatgpt.com "Apache Hive"
+[2]: https://hive.apache.org/docs/latest/admin/adminmanual-metastore-3-0-administration/ "Apache Hive : AdminManual Metastore 3.0 Administration"
+[3]: https://hive.apache.org/docs/latest/user/ "User Manual"
+[4]: https://hive.apache.org/docs/latest/language/languagemanual-ddl/?utm_source=chatgpt.com "LanguageManual DDL - Apache Hive"
+[5]: https://hive.apache.org/docs/latest/language/languagemanual-ddl/ "Apache Hive : LanguageManual DDL"
+[6]: https://hive.apache.org/docs/latest/user/tutorial/ "Apache Hive : Tutorial"
+[7]: https://hive.apache.org/docs/latest/admin/setting-up-hiveserver2/ "Apache Hive : Setting Up HiveServer2"
