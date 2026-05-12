@@ -1,0 +1,333 @@
+1. First things you should know in Excel
+
+A worksheet is the grid where you work.
+
+A cell is one box in that grid.
+
+A row goes left to right.
+
+A column goes top to bottom.
+
+Before doing any analysis, click inside your data and make sure your headings are in the first row.
+
+Make sure your data has no completely blank rows or columns in the middle.
+
+Excel’s analysis tools work best when the data is clean and tabular.
+
+For navigation, these are the most useful beginner shortcuts.
+
+Ctrl+S saves the file.
+
+Ctrl+C copies data.
+
+Ctrl+V pastes data.
+
+Ctrl+Z undoes the last action.
+
+Ctrl+A selects all data.
+
+Alt+H goes to the Home tab.
+
+Alt+A goes to the Data tab.
+
+Alt+N goes to Insert.
+
+Alt+M goes to Formulas.
+
+---
+
+2. Transforming and cleaning data
+
+A. Create a Table
+
+Click any cell inside your dataset.
+
+Press Ctrl+T.
+
+A dialog box appears.
+
+Make sure “My table has headers” is checked if your first row contains column names.
+
+Click OK.
+
+Excel tables make sorting, filtering, formulas, and PivotTables much easier.
+
+B. Trim extra spaces
+
+If text has extra spaces, use =TRIM(A2) in a new column.
+
+This removes extra spaces and leaves only single spaces between words.
+
+After typing the formula, press Enter.
+
+Drag the fill handle down to apply it to the rest of the rows.
+
+C. Paste as values
+
+When a formula result is correct and you want to lock it in as plain text or numbers, copy the cells.
+
+Use Ctrl+Alt+V.
+
+Press V.
+
+Press Enter.
+
+This opens Paste Special and pastes only the values, not the formulas.
+
+Your video note shows a ribbon-style route too.
+
+The important idea is the same.
+
+Paste the result, not the formula.
+
+D. Remove columns
+
+Select the whole column by clicking its letter at the top.
+
+Use Alt+H, D, C to delete the column.
+
+You can also right-click the column header and choose Delete.
+
+E. Round numbers
+
+If your numbers have decimals and you want to round up, use =ROUNDUP(A2,0).
+
+The second argument controls the number of decimal places.
+
+0 means a whole number.
+
+ROUNDUP always rounds away from zero.
+
+F. Geography data type
+
+If you type a city, state, or country name, you can convert that text into the Geography data type from the Data tab.
+
+Excel then connects the text to online geographic information and can return extra details in new columns.
+
+This feature is available in Microsoft 365 and Excel for the web.
+
+G. Remove duplicates
+
+Select your data.
+
+Go to Data > Data Tools > Remove Duplicates.
+
+Excel will ask which columns should be checked.
+
+Then it removes repeated records.
+
+A related option is Home > Conditional Formatting > Highlight Cells Rules > Duplicate Values.
+
+This only highlights duplicates instead of deleting them.
+
+---
+
+3. Descriptive statistics
+
+A. Turn on the Analysis ToolPak
+
+If you do not see Data Analysis on the Data tab, turn on the add-in first.
+
+Go to File > Options > Add-ins > Manage: Excel Add-ins > Go.
+
+Tick Analysis ToolPak.
+
+Press OK.
+
+After that, the Data Analysis button becomes available on the Data tab.
+
+B. Run Descriptive Statistics
+
+Go to Data > Data Analysis > Descriptive Statistics.
+
+Select your input range.
+
+Choose whether the data is in columns or rows.
+
+Tick Summary statistics.
+
+Microsoft says the Analysis ToolPak produces univariate statistics and reports the central tendency and variability of your data.
+
+C. Box and Whisker chart
+
+Select the numeric data.
+
+Go to Insert > Insert Statistic Chart > Box and Whisker.
+
+This chart is useful because it shows the distribution of the data and highlights outliers.
+
+D. Editing labels on a chart
+
+After creating the chart, right-click it.
+
+Choose Select Data if you need to change the label range.
+
+This is how you can point the chart to custom names, such as manager names or category labels.
+
+---
+
+4. Mean, median, and mode
+
+These are the three most common measures of central tendency.
+
+Microsoft explains them like this.
+
+The average is the arithmetic mean.
+
+The median is the middle value.
+
+The mode is the most frequently occurring value.
+
+For skewed data, they can be different.
+
+So it is useful to know all three.
+
+Mean
+
+The mean is the average of the numbers.
+
+Use =AVERAGE(A2:A20).
+
+Excel’s AVERAGE function returns the arithmetic mean of the values in the range.
+
+Example: if the numbers are 10, 20, 30, the mean is 20.
+
+Median
+
+The median is the middle number after sorting the data.
+
+Use =MEDIAN(A2:A20).
+
+If there are an even number of values, Excel averages the two middle numbers.
+
+Example: for 2, 3, 3, 5, 7, 10, the median is 4.
+
+Mode
+
+The mode is the value that appears most often.
+
+Use =MODE.SNGL(A2:A20) in newer Excel versions.
+
+Use =MODE(A2:A20) in older compatibility cases.
+
+Example: for 2, 3, 3, 5, 7, 10, the mode is 3.
+
+If multiple values tie for most frequent, MODE.MULT can return more than one mode.
+
+When to use each one
+
+Use the mean when your data is fairly balanced.
+
+Use the median when outliers may distort the average.
+
+Use the mode when you want to know the most common value.
+
+That is why these three numbers are often shown together in basic data analysis.
+
+---
+
+5. Data analysis with formulas
+
+A. Add a calculated column
+
+If you want to create a new measure such as sales amount, type a formula in a new column.
+
+Example: =Quantity*Price.
+
+Press Enter.
+
+Fill it down.
+
+If the result should stay fixed, copy the column and paste as values.
+
+B. PivotTable
+
+Click anywhere in your data.
+
+Go to Insert > PivotTable.
+
+Microsoft describes PivotTables as a powerful tool to calculate, summarize, and analyze data and see patterns and trends.
+
+C. Sort PivotTable data
+
+Inside the PivotTable, right-click a value.
+
+Choose Sort > Largest to Smallest.
+
+Microsoft’s PivotTable help says you can sort grand totals from largest to smallest this way.
+
+D. Show values as percentage
+
+Right-click the value field in the PivotTable.
+
+Choose Show Values As.
+
+Select % of Grand Total.
+
+This changes the display from raw numbers to percentages.
+
+---
+
+6. Reporting and dashboard-style tools
+
+A. Data Validation dropdown list
+
+To create a dropdown, go to Data > Data Validation.
+
+Choose List under Allow.
+
+Select the source range that contains your items.
+
+This is useful for limiting user input to approved values.
+
+B. XLOOKUP
+
+XLOOKUP searches one column or row.
+
+It returns a matching value from another column or row.
+
+A common pattern is =XLOOKUP(lookup_value, lookup_array, return_array).
+
+Microsoft recommends XLOOKUP for modern lookup work because it can search in any direction.
+
+C. SUMIFS
+
+SUMIFS adds values that meet multiple conditions.
+
+A common pattern is =SUMIFS(sum_range, criteria_range1, criteria1, criteria_range2, criteria2).
+
+Use it when you want totals based on more than one rule.
+
+Example: sales in a particular region and category.
+
+D. Conditional Formatting with data bars
+
+Select the cells.
+
+Go to Home > Conditional Formatting > Data Bars.
+
+Data bars give a quick visual comparison inside cells.
+
+This is useful in reports and dashboards.
+
+---
+
+7. A simple beginner workflow to follow every time
+
+First clean the data with Table, TRIM, Remove Duplicates, and Paste Special > Values.
+
+Then calculate basic statistics like mean, median, and mode.
+
+After that, build a PivotTable for summaries.
+
+Add a Box and Whisker chart for distribution.
+
+Finish with Data Validation, XLOOKUP, SUMIFS, and Conditional Formatting for reporting.
+
+That sequence matches the logic of Microsoft’s Excel analysis tools.
+
+Clean data first.
+
+Summarize next.
+
+Visualize last.
